@@ -1,0 +1,11 @@
+
+version: '2'
+services:
+  pameas-messaging-service:
+      image: endimion13/pameas-messaging-service:0.0.1
+      environment:
+        - IS_PRODUCTION=true
+      volumes:
+        - /home/ni/code/java/palaemon-db-proxy/:/certs/
+      ports:
+        - 3000:3000
