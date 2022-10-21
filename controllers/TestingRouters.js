@@ -39,4 +39,15 @@ router.get("/makeOAuth", async (req,res) => {
   // getMessages(306943808730)
 });
 
+
+
+router.post("/sendHtmlMessage", async (req, res) => {
+  let image = await base64ImageFromFilePath("image1.png");
+  let content = `<h3>Emergency Alert</h3><div><b>Please Move Immediately to <span style='color: red'>Muster Station B</span></b></div> located at the Restaurant (Lounge Area) of  <span style='color: red'>Deck 7</spa>`
+  sendMessageToUser(client, "Mumla_User", content,null);
+  res.sendStatus(200);
+});
+
+
+
 exports.TestRouterFactory = TestRouterFactory;

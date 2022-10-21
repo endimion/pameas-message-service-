@@ -29,10 +29,7 @@ async function sendMessageTactilon(receiverMSISDN, content) {
           Text: content,
           Recipients: [{ Msisdn: receiverMSISDN }],
           IsGroupMessage: false,
-          Attachment: {
-            Content: "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-            FileName: "test",
-          },
+        
           Bearer: "NFC",
           AvailableOnlyRecipients: false,
           RequiresAcknowledge: true,
@@ -89,6 +86,7 @@ async function getOAuth2AccessToken() {
       })
     ).data.access_token;
 
+    // console.log("tactilon OAUTH 2.0 response")
     // console.log(code);
 
     // let tactilonTokenEndpoint = process.env.TACTILON_TOKEN_ENDPOINT

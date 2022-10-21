@@ -70,21 +70,25 @@ const sendMessageToUser = (client, user, messageStr, imgStr = null) => {
   console.log(`will send to user ${user} the message ${messageStr}`);
 
   if(imgStr){
+    let theMessage = `<div>  <div>${messageStr} </div>  <div>${imgStr}</div> </div>`
+
     client.users
     .find("name", user)
-    .sendMessage(imgStr)
+    .sendMessage(theMessage)
     .catch((err) => {
       console.log(`error sending ${messageStr} to passenger ${user}`);
       console.log(err);
     });
-  }
-  client.users
+  }else{
+    client.users
     .find("name", user)
     .sendMessage(messageStr)
     .catch((err) => {
       console.log(`error sending ${messageStr} to passenger ${user}`);
       console.log(err);
     });
+  }
+  
 
 };
 
