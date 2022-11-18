@@ -24,11 +24,14 @@ const handleIncomingMessages = async (client, getUserByMumbleName) => {
       //get userDetails
       let userDetails = await getUserByMumbleName(message.sender.name);
       console.log(
-        `mumbleService, I found the user belof for the given name:${message.sender.name}`
+        `mumbleService, I found the user for the given name:${message.sender.name}`
       );
-      
-      if(userDetails && userDetails.networkInfo && userDetails.networkInfo.deviceInfoList){
-        
+
+      if (
+        userDetails &&
+        userDetails.networkInfo &&
+        userDetails.networkInfo.deviceInfoList
+      ) {
       }
       console.log(userDetails);
       console.log(
@@ -67,29 +70,40 @@ const handleIncomingMessages = async (client, getUserByMumbleName) => {
 };
 
 const sendMessageToUser = (client, user, messageStr, imgStr = null) => {
-  console.log(`will send to user ${user} the message ${messageStr}`);
+  // console.log(`will send to user ${user} the message ${messageStr}`);
+  if (!(messageStr == null && imgStr == null)) {
+    let theUser = client.users.find("name", user);
 
-  if(imgStr){
-    let theMessage = `<div>  <div>${messageStr} </div>  <div>${imgStr}</div> </div>`
-
-    client.users
-    .find("name", user)
-    .sendMessage(theMessage)
-    .catch((err) => {
-      console.log(`error sending ${messageStr} to passenger ${user}`);
-      console.log(err);
-    });
+    if (theUser) {
+      console.log(`trying to send ${messageStr}`);
+      if (imgStr) {
+        const regex = new RegExp("^(<header>)+(.+?(?=(</div>)))");
+        let theMessage = messageStr.replace(regex, replaceCurrying(imgStr));
+        if (theMessage != null)
+          theUser.sendMessage(theMessage).catch((err) => {
+            console.log(`error sending ${messageStr} to passenger ${user}`);
+            console.log(err);
+          });
+      } else {
+        theUser.sendMessage(messageStr).catch((err) => {
+          console.log(`error sending ${messageStr} to passenger ${user}`);
+          console.log(err);
+        });
+      }
+    } else {
+      console.log(`couldnt find a muble user with the name ${user}`);
+    }
   }else{
-    client.users
-    .find("name", user)
-    .sendMessage(messageStr)
-    .catch((err) => {
-      console.log(`error sending ${messageStr} to passenger ${user}`);
-      console.log(err);
-    });
+    console.log(`no data were added to the message`)
   }
-  
 
+
+};
+
+const replaceCurrying = (imageTag) => {
+  return (match, offset) => {
+    return match + imageTag; //+ "</div></main>:: sound: siren"
+  };
 };
 
 const sendMessageToChannel = (client, channelName, messageStr) => {

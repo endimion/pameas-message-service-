@@ -22,7 +22,7 @@ class RouterFactory {
 
 // middleware that is specific to this router
 router.use((req, res, next) => {
-  console.log(`Time: ${Date.now()}, URI: ${req.url}`);
+  // console.log(`Time: ${Date.now()}, URI: ${req.url}`);
   next();
 });
 
@@ -60,7 +60,7 @@ router.post("/sendMessageMumble", async (req, res) => {
 router.post("/sendMessageMumbleBulk", async (req, res) => {
   // let type = req.body.type;
   let listOfRequests = req.body.receivers;
-  console.log(listOfRequests)
+  // console.log(listOfRequests)
 
   listOfRequests.forEach(async (request) => {
     let hashedMacAddress = request.recipient;
@@ -68,8 +68,9 @@ router.post("/sendMessageMumbleBulk", async (req, res) => {
     let imagePath = request.visualAid;
     try {
       let user = await getUser(hashedMacAddress);
-      if (user != undefined && user.networkInfo != undefined) {
+      if (user!= null && user != undefined && user.networkInfo != undefined) {
         let mumbleId = user.networkInfo.messagingAppClientId;
+         
         if (!imagePath) {
           //"Mumla_User"
           sendMessageToUser(client, mumbleId, content);
@@ -81,7 +82,7 @@ router.post("/sendMessageMumbleBulk", async (req, res) => {
         }
       }
     } catch (error) {
-      console.log(`error getting user ${error}`);
+      console.log(error)
     }
   });
   res.sendStatus(200);

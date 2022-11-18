@@ -54,8 +54,8 @@ const getUserByMumbleName =  (mumbleName) => {
       resolve(response.data)
     })
     .catch(function (error) {
-      console.log(`error getting user with hashedMacAddress:${hashedMacAddress}`)
-      // console.error(error.code + "---" + error.response.status);
+      // console.log(`error getting user with hashedMacAddress:${hashedMacAddress}`)
+      console.error(error.code + "---" + error.response.status);
       reject(error.code)
     });
   })

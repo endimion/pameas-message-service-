@@ -1,9 +1,11 @@
 const fs = require("fs");
 
 const base64ImageFromFilePath = async (filePath) => {
-  return `<img src="data:image/png;base64,${encodeURIComponent(
+  return `<div><img src="data:image/png;base64,${encodeURIComponent(
     await base64Encode(filePath)
-  )}"/>`;
+  )}"/></div>`;
+  //  return `<div><img src="data:image/png;base64,${ 
+  //   await base64Encode(filePath)}"/></div>`;
 };
 
 function base64Encode(filePath) {

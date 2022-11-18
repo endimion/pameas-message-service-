@@ -51,7 +51,7 @@ async function getMessages(receiverMSISDN) {
     let token = await tokenObject; //.data.access_token;
     let backendURI = `https://api.ea-1.eu-west-1.agnet.com/api/v2/subscriber/${receiverMSISDN}/message?Offset=0&Records=50`;
     console.log(`Making request....`);
-    console.log(token);
+    // console.log(token);
     await axios.get(backendURI, {
       headers: {
         authorization: `Bearer ${token}`,
