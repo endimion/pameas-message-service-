@@ -42,11 +42,11 @@ router.post("/sendMessageMumble", async (req, res) => {
       if (!imagePath) {
         //"Mumla_User"
         sendMessageToUser(client, mumbleId, content);
-        saveMessage("pameas_evacuation_assistant", mumbleId, content);
+        // saveMessage("pameas_evacuation_assistant", mumbleId, content);
       } else {
         let image = await base64ImageFromFilePath(imagePath);
         sendMessageToUser(client, mumbleId, image);
-        saveMessage("pameas_evacuation_assistant", mumbleId, image);
+        // saveMessage("pameas_evacuation_assistant", mumbleId, image);
       }
 
       res.sendStatus(200);
@@ -74,11 +74,11 @@ router.post("/sendMessageMumbleBulk", async (req, res) => {
         if (!imagePath) {
           //"Mumla_User"
           sendMessageToUser(client, mumbleId, content);
-          saveMessage("pameas_evacuation_assistant", mumbleId, content);
+          // saveMessage("pameas_evacuation_assistant", mumbleId, content);
         } else {
           let image = await base64ImageFromFilePath(imagePath);
           sendMessageToUser(client,  mumbleId, content, image);
-          saveMessage("pameas_evacuation_assistant", mumbleId, image);
+          // saveMessage("pameas_evacuation_assistant", mumbleId, image);
         }
       }
     } catch (error) {
@@ -99,7 +99,7 @@ router.post("/sendMessageTactilonBulk", async (req, res) => {
       if (user != undefined && user.networkInfo != undefined) {
         let msisdn = user.networkInfo.messagingAppClientId;
         sendMessageTactilon(msisdn, content);
-        saveMessage("pameas_evacuation_assistant", msisdn, content);
+        // saveMessage("pameas_evacuation_assistant", msisdn, content);
       }
     } catch (error) {
       console.log(`error getting user ${error}`);
@@ -114,7 +114,7 @@ router.post("/sendMessageTactilon", async (req, res) => {
   let content = req.body.content;
   try {
     sendMessageTactilon(msisdn, content);
-    saveMessage("pameas_evacuation_assistant", msisdn, content);
+    // saveMessage("pameas_evacuation_assistant", msisdn, content);
 
     res.sendStatus(200);
   } catch (error) {
