@@ -5,6 +5,16 @@ const { sendMessageTactilon } = require("../services/TactilonService");
 const { getUser } = require("../services/DBProxyService");
 const { saveMessage } = require("../services/ElasticService");
 const { base64ImageFromFilePath } = require("../services/imageUtilsService");
+const Prometheus = require("prom-client");
+ // Create a Registry which registers the metrics
+const register = new Prometheus.Registry()
+// Add a default label which is added to all metrics
+register.setDefaultLabels({
+  app: 'pameas-messaging-service'
+})
+// Enable the collection of default metrics
+Prometheus.collectDefaultMetrics({ register })
+
 
 let client;
 
@@ -23,6 +33,12 @@ class RouterFactory {
 // middleware that is specific to this router
 router.use((req, res, next) => {
   // console.log(`Time: ${Date.now()}, URI: ${req.url}`);
+  const responseTimeInMs = Date.now() ;
+
+  // After each response
+  // httpRequestDurationMicroseconds
+  //   .labels(req.path)
+  //   .observe(responseTimeInMs);
   next();
 });
 
@@ -30,6 +46,15 @@ router.use((req, res, next) => {
 router.get("/", (req, res) => {
   res.send("Router is working ok");
 });
+
+
+// Metrics endpoint
+router.get('/metrics', async (req, res) => {
+  res.setHeader('Content-Type', register.contentType)
+  let result = register.metrics()
+  res.end(await register.metrics())
+})
+
 
 router.post("/sendMessageMumble", async (req, res) => {
   let hashedMacAddress = req.body.hashedMacAddress;
@@ -68,21 +93,21 @@ router.post("/sendMessageMumbleBulk", async (req, res) => {
     let imagePath = request.visualAid;
     try {
       let user = await getUser(hashedMacAddress);
-      if (user!= null && user != undefined && user.networkInfo != undefined) {
+      if (user != null && user != undefined && user.networkInfo != undefined) {
         let mumbleId = user.networkInfo.messagingAppClientId;
-         
+
         if (!imagePath) {
           //"Mumla_User"
           sendMessageToUser(client, mumbleId, content);
           // saveMessage("pameas_evacuation_assistant", mumbleId, content);
         } else {
           let image = await base64ImageFromFilePath(imagePath);
-          sendMessageToUser(client,  mumbleId, content, image);
+          sendMessageToUser(client, mumbleId, content, image);
           // saveMessage("pameas_evacuation_assistant", mumbleId, image);
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   });
   res.sendStatus(200);
